@@ -1,0 +1,7 @@
+1) Cài phụ thuộc
+Mở terminal trong ~/Desktop/pki_user_tool rồi cài:
+	!python3 -m venv .venv
+	!source .venv/bin/activate
+	!pip install --upgrade pip
+	!pip install cryptography requests PySide6
+	
