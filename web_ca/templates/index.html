@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>CA Management</title>
+  </head>
+  <body>
+    <h1>Danh sách yêu cầu cấp chứng chỉ</h1>
+    <table border="1" cellpadding="5">
+      <tr>
+        <th>ID</th>
+        <th>Tên</th>
+        <th>Tổ chức</th>
+        <th>Trạng thái</th>
+        <th>Thao tác</th>
+      </tr>
+      {% for r in requests %}
+      <tr>
+        <td>{{ r.id }}</td>
+        <td>{{ r.cn }}</td>
+        <td>{{ r.org }}</td>
+        <td>{{ r.status }}</td>
+        <td>
+          {% if r.status == "pending" %}
+          <a href="/approve/{{r.id}}">Phê duyệt</a>
+          {% else %}
+          <a href="/{{r.cert_path}}">Tải chứng chỉ</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>
