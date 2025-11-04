@@ -24,7 +24,7 @@
           {% if r.status == "pending" %}
           <a href="/approve/{{r.id}}">Phê duyệt</a>
           {% else %}
-          <a href="/{{r.cert_path}}">Tải chứng chỉ</a>
+          <a href="/issued/{{r.cert_path}}">Tải chứng chỉ</a>
           {% endif %}
         </td>
       </tr>

@@ -1,29 +1,11 @@
 [
   {
-    "cn": "thu_nghiem",
-    "org": "thu_nghiem",
-    "country": "VN",
-    "public_key": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAi+Kw63EObTTVaYIZ73J4\nmEBhWak8hQ0qIJRn5s1oY8pLeXyIxD+SETllvK/7jfQrgYp9TiRNj9uL+Pg3bmJZ\nN0UFMP1mTIx4Uaiidb8AlE9Wc0UGOcsJpHhNphiundkLy9pVu/XHHr7UZ3LBOUJP\n4Lmp4jTxSMUF7HzVhX+hD+WopVIW/2vEPWkabSPC9NogyaBwsGLCk6erE2qI97Aq\nYgo+oh7iH/z8Mp0eoOJBij7GWwA6JRVigB1F7uAC4R1RPGT498MKcz29Cw8UWMEC\nKkFhP1Cy88wiyhWIxuH9zyugh/fEmSfvERDVrHztNHfy500oUEsEi+NET54+pzAH\nxQIDAQAB\n-----END PUBLIC KEY-----\n",
     "id": 1,
-    "status": "approved",
-    "cert_path": "issued\\thu_nghiem_cert.pem"
-  },
-  {
-    "cn": "test",
-    "org": "test",
+    "cn": "nghung",
+    "org": "Tap Doan Trach Nhiem Huu Han Mot Thanh Vien",
     "country": "VN",
-    "public_key": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAi+Kw63EObTTVaYIZ73J4\nmEBhWak8hQ0qIJRn5s1oY8pLeXyIxD+SETllvK/7jfQrgYp9TiRNj9uL+Pg3bmJZ\nN0UFMP1mTIx4Uaiidb8AlE9Wc0UGOcsJpHhNphiundkLy9pVu/XHHr7UZ3LBOUJP\n4Lmp4jTxSMUF7HzVhX+hD+WopVIW/2vEPWkabSPC9NogyaBwsGLCk6erE2qI97Aq\nYgo+oh7iH/z8Mp0eoOJBij7GWwA6JRVigB1F7uAC4R1RPGT498MKcz29Cw8UWMEC\nKkFhP1Cy88wiyhWIxuH9zyugh/fEmSfvERDVrHztNHfy500oUEsEi+NET54+pzAH\nxQIDAQAB\n-----END PUBLIC KEY-----\n",
-    "id": 2,
+    "csr": "-----BEGIN CERTIFICATE REQUEST-----\nMIICmTCCAYECAQAwVDELMAkGA1UEBhMCVk4xNDAyBgNVBAoMK1RhcCBEb2FuIFRy\nYWNoIE5oaWVtIEh1dSBIYW4gTW90IFRoYW5oIFZpZW4xDzANBgNVBAMMBm5naHVu\nZzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMmiFd4kpHIYE1Egf1VP\nzDWQMmARV2JDK5NG4PKMSGY6AfMOFjkbVHxh5nIpT0dWaoNjkTAl3vjZh+vKGENq\nn8moGe1v1cE3+Ormj/HOcLFW5wsbK8kew6S/VMRychejxGZ4ktDCnhJ/AKJUUxO5\nXF1X4clsYiM6Z+eBnJ19R1M9ZjM7nzSjQ2A9XUiGfMNxSpTgKxgsQ20HFiUGVub1\nU1aidCtkB3vC/epzv4e9SyQdWtFFHI6hpadGVrirlG3FgWNyNXHpw16TNWg5yPqZ\nW/xQY6N4+ZRCuPVaKVEfibf9TwWCm+ZJokLzZ7956TBUOd7hvlo+TbglNyKobuON\nN6sCAwEAAaAAMA0GCSqGSIb3DQEBCwUAA4IBAQAeeATm7m9QqpwljyGzHRaKpe/8\nYPXbeUeEFJOiK0hXDmMIrJUXVvhjLJ35AlOh4EuoZh0e2PNXJ6nMKFK4O/08HJf9\n2oQudTI4dgKNvJn1vwi/p70tCoveQ8WuI9ZBX5KQoDahEetjsHjuVYPBf0Pjucws\nL0Ddi3HvyHIU0J96b9vuXE4OU52seY8b+apprKy5EU0KvJ0M+6Z7mfL5/OxfchAl\nDJ9nVwEqmkL1CHdlDmP7Jo3HcDRKXvuwtRs9Sjmy5nJHnCo7Pv+go6PaCND4EEnt\n06taI608jfEVFKHbqReL8UNcPu9mVx6VQosZGUzSjFTnXl67IapscLwScbpl\n-----END CERTIFICATE REQUEST-----\n",
     "status": "approved",
-    "cert_path": "issued\\test_cert.pem"
-  },
-  {
-    "cn": "thu_nghiem",
-    "org": "thu_nghiem",
-    "country": "VN",
-    "public_key": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAi+Kw63EObTTVaYIZ73J4\nmEBhWak8hQ0qIJRn5s1oY8pLeXyIxD+SETllvK/7jfQrgYp9TiRNj9uL+Pg3bmJZ\nN0UFMP1mTIx4Uaiidb8AlE9Wc0UGOcsJpHhNphiundkLy9pVu/XHHr7UZ3LBOUJP\n4Lmp4jTxSMUF7HzVhX+hD+WopVIW/2vEPWkabSPC9NogyaBwsGLCk6erE2qI97Aq\nYgo+oh7iH/z8Mp0eoOJBij7GWwA6JRVigB1F7uAC4R1RPGT498MKcz29Cw8UWMEC\nKkFhP1Cy88wiyhWIxuH9zyugh/fEmSfvERDVrHztNHfy500oUEsEi+NET54+pzAH\nxQIDAQAB\n-----END PUBLIC KEY-----\n",
-    "id": 3,
-    "status": "approved",
-    "cert_path": "issued\\thu_nghiem_cert.pem"
+    "cert_path": "nghung_cert.pem"
   }
 ]

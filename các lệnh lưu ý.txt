@@ -1,0 +1,5 @@
+* Câu lệnh lấy public key từ CSR:
+openssl req -in [tên CSR].pem -pubkey -noout
+
+* Câu lệnh lấy public key từ chứng chỉ:
+openssl x509 -in [tên chứng chỉ].pem -pubkey -noout

@@ -1,25 +1,51 @@
 import requests
 import json
 import os
+from cryptography import x509
+from cryptography.x509.oid import NameOID
+from cryptography.hazmat.primitives import serialization, hashes
+from cryptography.hazmat.primitives.asymmetric import rsa, ec
 
-CA_SERVER = "http://127.0.0.1:5000/api/submit_request"
+CA_SERVER = "http://127.0.0.1:5000/api/submit_csr"
 
-def gui_yeu_cau(pubkey_path, cn, org, country):
+def tao_csr(private_key_path, cn, org, country):
+    with open(private_key_path, "rb") as f:
+        key_data = f.read()
+    private_key = serialization.load_pem_private_key(key_data, password=None)
+
+    subject = x509.Name([
+        x509.NameAttribute(NameOID.COUNTRY_NAME, country),
+        x509.NameAttribute(NameOID.ORGANIZATION_NAME, org),
+        x509.NameAttribute(NameOID.COMMON_NAME, cn),
+    ])
+
+    csr_builder = x509.CertificateSigningRequestBuilder().subject_name(subject)
+
+    if isinstance(private_key, rsa.RSAPrivateKey):
+        csr = csr_builder.sign(private_key, hashes.SHA256())
+    elif isinstance(private_key, ec.EllipticCurvePrivateKey):
+        csr = csr_builder.sign(private_key, hashes.SHA256())
+    else:
+        csr = csr_builder.sign(private_key, hashes.SHA256())
+
+    csr_pem = csr.public_bytes(serialization.Encoding.PEM).decode('utf-8')
+    return csr_pem
+
+
+def gui_yeu_cau(private_key_path, cn, org, country):
     try:
-        with open(pubkey_path, "r") as f:
-            pubkey_pem = f.read()
-
+        csr_pem = tao_csr(private_key_path, cn, org, country)
         data = {
             "cn": cn,
             "org": org,
             "country": country,
-            "public_key": pubkey_pem
+            "csr": csr_pem
         }
 
         response = requests.post(CA_SERVER, json=data)
         if response.status_code == 200:
             return "OK"
         else:
-            return f"Lỗi từ CA: {response.text}"
+            return f"Lỗi từ CA: {response.status_code} - {response.text}"
     except Exception as e:
-        return str(e)
+        return f"Lỗi khi tạo/gửi CSR: {str(e)}"
