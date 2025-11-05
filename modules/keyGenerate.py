@@ -26,6 +26,7 @@ def sinh_khoa_rsa(ten="nguoidung", bit=2048, thu_muc="data/keys"):
 
     print(f"Đã sinh khóa RSA {bit} bit trong {thu_muc}")
 
+
 def sinh_khoa_ecdsa(ten="nguoidung", curve_name="P-256", thu_muc="data/keys"):
     if not os.path.exists(thu_muc):
         os.makedirs(thu_muc)
@@ -53,8 +54,3 @@ def sinh_khoa_ecdsa(ten="nguoidung", curve_name="P-256", thu_muc="data/keys"):
         ))
 
     print(f"Đã sinh khóa ECDSA {curve_name} trong {thu_muc}")
-
-# Test nhanh
-if __name__ == "__main__":
-    sinh_khoa_rsa("test", 2048, "output")
-    sinh_khoa_ecdsa("test", "P-384", "output")

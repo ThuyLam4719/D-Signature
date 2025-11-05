@@ -9,6 +9,7 @@ from PySide6.QtCore import Qt
 # Import giao diện con
 from modules.ui.ui_sinh_khoa import WidgetSinhKhoa
 from modules.ui.ui_ky_du_lieu import WidgetKyDuLieu
+from modules.ui.ui_dang_ky_chung_chi import WidgetDangKyChungChi
 
 
 class MainApp(QWidget):
@@ -24,6 +25,8 @@ class MainApp(QWidget):
         self.menu = QListWidget()
         self.menu.addItem(QListWidgetItem("Tạo khóa"))
         self.menu.addItem(QListWidgetItem("Ký dữ liệu"))
+        self.menu.addItem(QListWidgetItem("Yêu cầu chứng chỉ"))
+
 
         self.menu.setMaximumWidth(200)
         self.menu.setStyleSheet("""
@@ -41,8 +44,10 @@ class MainApp(QWidget):
         self.noi_dung = QStackedWidget()
         self.widget_sinh_khoa = WidgetSinhKhoa()
         self.widget_ky_du_lieu = WidgetKyDuLieu()
+        self.widget_dang_ky = WidgetDangKyChungChi()
         self.noi_dung.addWidget(self.widget_sinh_khoa)
         self.noi_dung.addWidget(self.widget_ky_du_lieu)
+        self.noi_dung.addWidget(self.widget_dang_ky)
 
         # --- Khi click menu, đổi trang ---
         self.menu.currentRowChanged.connect(self.noi_dung.setCurrentIndex)
