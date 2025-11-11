@@ -3,6 +3,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout, QFileDialog, QMessageBox, QHBoxLayout
 )
 import os
+# Đảm bảo đường dẫn import này đúng, nếu modules nằm ngang hàng signData.py thì cần sửa
 from modules import signData
 
 
@@ -15,7 +16,7 @@ class WidgetKyDuLieu(QWidget):
         self.duong_dan_file = None
         self.duong_dan_luu = None
 
-        # --- Các thành phần giao diện ---
+        # Các thành phần giao diện 
         self.nhan_khoa = QLabel("Chọn file khóa bí mật:")
         self.o_khoa = QLineEdit()
         self.nut_chon_khoa = QPushButton("Chọn khóa...")
@@ -25,29 +26,29 @@ class WidgetKyDuLieu(QWidget):
         self.nhan_file_da_chon = QLabel("(Chưa chọn file)")
         self.o_thong_diep = QTextEdit()
 
-        # --- Phần chọn nơi lưu chữ ký ---
+        # Phần chọn nơi lưu chữ ký  
         self.nhan_luu = QLabel("Nơi lưu file chữ ký:")
         self.o_noi_luu = QLineEdit()
         self.o_noi_luu.setPlaceholderText("Chưa chọn nơi lưu...")
         self.nut_chon_luu = QPushButton("Chọn nơi lưu trữ")
         self.nut_ky = QPushButton("Ký dữ liệu")
 
-        # --- Layout khóa ---
+        # Layout khóa 
         layout_khoa = QHBoxLayout()
         layout_khoa.addWidget(self.o_khoa)
         layout_khoa.addWidget(self.nut_chon_khoa)
 
-        # --- Layout chọn file ---
+        # Layout chọn file
         layout_file = QHBoxLayout()
         layout_file.addWidget(self.nut_chon_file)
         layout_file.addWidget(self.nhan_file_da_chon)
 
-        # --- Layout nơi lưu chữ ký ---
+        # Layout nơi lưu chữ ký
         layout_luu = QHBoxLayout()
         layout_luu.addWidget(self.o_noi_luu)
         layout_luu.addWidget(self.nut_chon_luu)
 
-        # --- Layout chính ---
+        # Layout chính
         layout = QVBoxLayout()
         layout.addWidget(self.nhan_khoa)
         layout.addLayout(layout_khoa)
@@ -59,15 +60,25 @@ class WidgetKyDuLieu(QWidget):
         layout.addWidget(self.nut_ky)
         self.setLayout(layout)
 
-        # --- Kết nối sự kiện ---
+        # Kết nối sự kiện
         self.nut_chon_khoa.clicked.connect(self.chon_file_khoa)
         self.nut_chon_file.clicked.connect(self.chon_file_can_ky)
         self.nut_chon_luu.clicked.connect(self.chon_noi_luu)
-        self.nut_ky.clicked.connect(self.ky_du_lieu)
+        self.nut_ky.clicked.connect(self.thuc_hien_ky_du_lieu) # Đổi tên hàm
 
     # ----------------------------
-    #  Các hàm chức năng giao diện
+    #   Các hàm chức năng giao diện
     # ----------------------------
+
+    def doc_noi_dung_file(self, file_path):
+        """Đọc toàn bộ nội dung file dưới dạng string."""
+        try:
+            # Đọc ở chế độ văn bản để lấy string, sử dụng 'errors="ignore"' cho an toàn
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                return f.read()
+        except Exception as e:
+            QMessageBox.critical(self, "Lỗi đọc file", f"Không thể đọc file: {str(e)}")
+            return None
 
     def chon_file_khoa(self):
         file_path, _ = QFileDialog.getOpenFileName(
@@ -84,22 +95,23 @@ class WidgetKyDuLieu(QWidget):
             self.duong_dan_file = file_path
             ten_file = os.path.basename(file_path)
             self.nhan_file_da_chon.setText(f"Đã chọn: {ten_file}")
-            # Hiển thị 4 dòng đầu của nội dung file
-            try:
-                with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
-                    dong = f.readlines()
-                    xem_truoc = "".join(dong[:4])
-                    if len(dong) > 4:
-                        xem_truoc += "\n..."
-                    self.o_thong_diep.setPlainText(xem_truoc)
-            except Exception as e:
-                self.o_thong_diep.setPlainText(f"Lỗi đọc file: {str(e)}")
+            
+            # Đọc nội dung file để hiển thị
+            noi_dung_goc = self.doc_noi_dung_file(file_path)
+            
+            if noi_dung_goc is not None:
+                # Hiển thị 4 dòng đầu
+                dong = noi_dung_goc.splitlines()
+                xem_truoc = "\n".join(dong[:4])
+                if len(dong) > 4:
+                    xem_truoc += "\n..."
+                self.o_thong_diep.setPlainText(xem_truoc)
+
 
     def chon_noi_luu(self):
         """Chọn nơi lưu và đặt tên file chữ ký"""
         goi_y_ten = "chu_ky.sig"
         if self.duong_dan_file:
-            # Nếu đang ký file, gợi ý tên chữ ký theo tên file
             ten_file = os.path.splitext(os.path.basename(self.duong_dan_file))[0]
             goi_y_ten = f"{ten_file}_chu_ky.sig"
 
@@ -111,59 +123,61 @@ class WidgetKyDuLieu(QWidget):
         )
 
         if duong_dan:
-            # Đảm bảo đuôi file là .sig
             if not duong_dan.endswith(".sig"):
                 duong_dan += ".sig"
             self.duong_dan_luu = duong_dan
             self.o_noi_luu.setText(duong_dan)
 
     # ----------------------------
-    #  Hàm thực hiện ký
+    #   Hàm thực hiện ký
     # ----------------------------
-    def ky_du_lieu(self):
+    def thuc_hien_ky_du_lieu(self):
         duong_dan_khoa = self.o_khoa.text().strip()
-        thong_diep = self.o_thong_diep.toPlainText().strip()
+        thong_diep_input = self.o_thong_diep.toPlainText() # Lấy nội dung từ textbox
 
-        # Kiểm tra khóa bí mật
-        if not duong_dan_khoa or not os.path.exists(duong_dan_khoa):
-            QMessageBox.warning(self, "Lỗi", "Vui lòng chọn khóa bí mật hợp lệ!")
-            return
-
-        # Nếu người dùng chọn file thì đọc file, ngược lại lấy nội dung nhập
+        # 1. Xác định nội dung thông điệp gốc
+        thong_diep_goc = None
         if self.duong_dan_file:
-            try:
-                with open(self.duong_dan_file, "rb") as f:
-                    du_lieu = f.read()
-                thong_diep = du_lieu.decode("utf-8", errors="ignore")
-            except Exception as e:
-                QMessageBox.critical(self, "Lỗi đọc file", f"Không thể đọc file: {str(e)}")
-                return
-        elif not thong_diep:
+            # Nếu chọn file, phải đọc lại toàn bộ nội dung
+            thong_diep_goc = self.doc_noi_dung_file(self.duong_dan_file)
+            if thong_diep_goc is None: return
+        elif thong_diep_input.strip():
+            # Nếu chỉ nhập text vào ô
+            thong_diep_goc = thong_diep_input
+        else:
             QMessageBox.warning(self, "Lỗi", "Vui lòng nhập thông điệp hoặc chọn file để ký!")
             return
 
+        # 2. Kiểm tra khóa bí mật
+        if not duong_dan_khoa or not os.path.exists(duong_dan_khoa):
+            QMessageBox.warning(self, "Lỗi", "Vui lòng chọn khóa bí mật hợp lệ!")
+            return
+        
+        # 3. Ký: Bắt buộc phải .strip() để loại bỏ tất cả ký tự trắng thừa
+        # Đây là bước quan trọng nhất để khớp với xác thực.
+        thong_diep_clean = thong_diep_goc.strip()
+
         # Gọi hàm ký
-        chu_ky = signData.ky_du_lieu(duong_dan_khoa, thong_diep)
+        chu_ky = signData.ky_du_lieu(duong_dan_khoa, thong_diep_clean) # <-- TRUYỀN DỮ LIỆU ĐÃ CLEAN
 
         if chu_ky.startswith("Lỗi"):
             QMessageBox.critical(self, "Ký thất bại", chu_ky)
             return
 
-        # Nếu chưa chọn nơi lưu, hỏi lại người dùng
+        # 4. Lưu chữ ký vào file
         if not self.duong_dan_luu:
             self.chon_noi_luu()
             if not self.duong_dan_luu:
                 QMessageBox.information(self, "Hủy", "Bạn đã hủy lưu chữ ký.")
                 return
 
-        # Lưu chữ ký vào file
         try:
             with open(self.duong_dan_luu, "w") as f:
                 f.write(chu_ky)
             QMessageBox.information(
                 self,
                 "Thành công",
-                f"✅ Ký thành công!\nChữ ký đã lưu tại:\n{self.duong_dan_luu}",
+                f"Ký thành công!\nChữ ký đã lưu tại:\n{self.duong_dan_luu}",
             )
         except Exception as e:
             QMessageBox.critical(self, "Lỗi lưu file", f"Không thể lưu chữ ký:\n{str(e)}")

@@ -1,27 +1,27 @@
 from cryptography.hazmat.primitives.asymmetric import rsa, ec
-from cryptography.hazmat.primitives import serialization
-import os
+from cryptography.hazmat.primitives import serialization #chuyển khóa sang bytes và ngược lại
+import os #Thao tác file hệ thống
 
 def sinh_khoa_rsa(ten="nguoidung", bit=2048, thu_muc="data/keys"):
     if not os.path.exists(thu_muc):
         os.makedirs(thu_muc)
 
     khoa_rieng = rsa.generate_private_key(
-        public_exponent=65537,
-        key_size=bit
+        public_exponent=65537, #giá trị mặc định tiêu chuẩn, an toàn
+        key_size=bit #2048,3072,4096
     )
 
     with open(os.path.join(thu_muc, f"{ten}_rsa_private.pem"), "wb") as f:
         f.write(khoa_rieng.private_bytes(
             encoding=serialization.Encoding.PEM,
-            format=serialization.PrivateFormat.TraditionalOpenSSL,
+            format=serialization.PrivateFormat.TraditionalOpenSSL, #định dạng khóa theo PKCS#1
             encryption_algorithm=serialization.NoEncryption()
         ))
 
     with open(os.path.join(thu_muc, f"{ten}_rsa_public.pem"), "wb") as f:
         f.write(khoa_rieng.public_key().public_bytes(
             encoding=serialization.Encoding.PEM,
-            format=serialization.PublicFormat.SubjectPublicKeyInfo
+            format=serialization.PublicFormat.SubjectPublicKeyInfo #X.509/SPKI
         ))
 
     print(f"Đã sinh khóa RSA {bit} bit trong {thu_muc}")
@@ -31,11 +31,11 @@ def sinh_khoa_ecdsa(ten="nguoidung", curve_name="P-256", thu_muc="data/keys"):
         os.makedirs(thu_muc)
 
     if curve_name == "P-256":
-        curve = ec.SECP256R1()
+        curve = ec.SECP256R1() #~128-bits
     elif curve_name == "P-384":
-        curve = ec.SECP384R1()
+        curve = ec.SECP384R1() #~192-bits
     else:
-        curve = ec.SECP521R1()
+        curve = ec.SECP521R1() #~256-bits
 
     khoa_rieng = ec.generate_private_key(curve)
 
