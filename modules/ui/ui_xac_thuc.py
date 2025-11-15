@@ -15,6 +15,8 @@ class WidgetXacThuc(QWidget):
         
         layout = QVBoxLayout(self)
         layout.setAlignment(Qt.AlignmentFlag.AlignTop) # Căn chỉnh layout
+        layout.setContentsMargins(40, 30, 40, 30)  # left, top, right, bottom
+        layout.setSpacing(12)
 
         # --- Tiêu đề ---
         title = QLabel("Xác Thực Chữ Ký Số")
@@ -23,11 +25,12 @@ class WidgetXacThuc(QWidget):
 
 
         #Chọn Khóa Công Khai
-        layout.addWidget(QLabel("1. Khóa Công Khai (Public Key):"))
+        layout.addWidget(QLabel("Khóa Công Khai (Public Key):"))
         self.key_path_input = QLineEdit()
         self.key_path_input.setPlaceholderText("Đường dẫn tới file public key (.pem)")
         self.key_path_input.setReadOnly(True)
-        btn_chon_khoa = QPushButton("Chọn File Khóa")
+        btn_chon_khoa = QPushButton("Chọn")
+        btn_chon_khoa.setMinimumHeight(36)
         btn_chon_khoa.clicked.connect(lambda: self.chon_file(
             self.key_path_input, "PEM Public Key (*.pem)", "Chọn Public Key", "public_key"
         ))
@@ -38,11 +41,12 @@ class WidgetXacThuc(QWidget):
         layout.addLayout(h_layout_key)
         
         #Chọn Thông Điệp Gốc
-        layout.addWidget(QLabel("2. Thông Điệp Gốc (File đã được ký):"))
+        layout.addWidget(QLabel("Thông Điệp Gốc (File đã được ký):"))
         self.message_path_input = QLineEdit()
         self.message_path_input.setPlaceholderText("Đường dẫn tới file thông điệp gốc (.txt, .data, ...)")
         self.message_path_input.setReadOnly(True)
-        btn_chon_message = QPushButton("Chọn File Thông Điệp")
+        btn_chon_message = QPushButton("Chọn")
+        btn_chon_message.setMinimumHeight(36)
         btn_chon_message.clicked.connect(lambda: self.chon_file(
             self.message_path_input, "Tất cả Files (*);;Text Files (*.txt)", "Chọn File Thông Điệp Gốc", "message"
         ))
@@ -53,11 +57,12 @@ class WidgetXacThuc(QWidget):
         layout.addLayout(h_layout_msg)
 
         #Chọn Chữ Ký
-        layout.addWidget(QLabel("3. Chữ Ký Số (File Base64):"))
+        layout.addWidget(QLabel("Chữ Ký Số (File Base64):"))
         self.signature_path_input = QLineEdit()
         self.signature_path_input.setPlaceholderText("Đường dẫn tới file chữ ký (.sig, .txt, ...)")
         self.signature_path_input.setReadOnly(True)
-        btn_chon_signature = QPushButton("Chọn File Chữ Ký")
+        btn_chon_signature = QPushButton("Chọn")
+        btn_chon_signature.setMinimumHeight(36)
         btn_chon_signature.clicked.connect(lambda: self.chon_file(
             self.signature_path_input, "Tất cả Files (*);;Signature Files (*.sig)", "Chọn File Chữ Ký Base64", "signature"
         ))
@@ -70,12 +75,12 @@ class WidgetXacThuc(QWidget):
 
         #Nút Xác Thực
         btn_xac_thuc = QPushButton("Xác Thực Chữ Ký")
-        btn_xac_thuc.setStyleSheet("background-color: #007bff; color: white; font-weight: bold; padding: 10px;")
+        btn_xac_thuc.setMinimumHeight(40)
         btn_xac_thuc.clicked.connect(self.thuc_hien_xac_thuc)
         layout.addWidget(btn_xac_thuc)
 
         # Vùng hiển thị kết quả (QTextEdit MỚI)
-        layout.addWidget(QLabel("4. Kết Quả và Hash:"))
+        layout.addWidget(QLabel("Kết Quả và Hash:"))
         self.result_output = QTextEdit()
         self.result_output.setReadOnly(True)
         self.result_output.setFixedHeight(200)
@@ -96,8 +101,6 @@ class WidgetXacThuc(QWidget):
             if selected_files:
                 file_path = selected_files[0]
                 line_edit.setText(file_path)
-                # Giữ lại QMessageBox thông báo đã chọn file (tùy chọn)
-                QMessageBox.information(self, "Đã chọn", f"Đã chọn file {file_type}: {os.path.basename(file_path)}")
     
     def doc_noi_dung_file(self, file_path, is_signature=False):
         """Đọc nội dung file và xử lý Base64 nghiêm ngặt"""
@@ -159,10 +162,10 @@ class WidgetXacThuc(QWidget):
             
             # Chuẩn bị thông báo hiển thị trên QTextEdit
             hash_msg = (
-                f"**HASH GỐC (từ Thông điệp):**\n"
-                f"```\n{hash_goc}\n```\n\n"
-                f"**HASH GIẢI MÃ (từ Chữ ký):**\n"
-                f"```\n{hash_giai_ma}\n```"
+                f"<b><br>HASH GỐC (từ Thông điệp):</b><br>"  # Dùng <b> cho in đậm
+                f"<br>{hash_goc}<br><br>"
+                f"<b>HASH GIẢI MÃ (từ Chữ ký):</b><br>"
+                f"<br>{hash_giai_ma}<br><br>"
             )
             
             if ket_qua:

@@ -15,7 +15,7 @@ class WidgetSinhKhoa(QWidget):
 
         # --- Tiêu đề ---
         tieu_de = QLabel("Tạo cặp khóa mới")
-        tieu_de.setStyleSheet("font-size: 18px; font-weight: bold;")
+        tieu_de.setStyleSheet("font-size: 24px; font-weight: bold; margin-bottom: 10px;")
 
         # --- Nhập tên khóa ---
         self.lbl_ten = QLabel("Tên khóa:")
@@ -46,6 +46,7 @@ class WidgetSinhKhoa(QWidget):
         self.o_noi_luu = QLineEdit()
         self.o_noi_luu.setPlaceholderText("Chưa chọn nơi lưu...")
         self.nut_chon_luu = QPushButton("Chọn")
+        self.nut_chon_luu.setMinimumHeight(36)
         self.nut_chon_luu.clicked.connect(self.chon_noi_luu)
 
         layout_luu = QHBoxLayout()
@@ -54,10 +55,13 @@ class WidgetSinhKhoa(QWidget):
 
         # --- Nút sinh khóa ---
         self.btn_sinh = QPushButton("Tạo khóa")
+        self.btn_sinh.setMinimumHeight(40)
         self.btn_sinh.clicked.connect(self.sinh_khoa)
 
         # --- Layout tổng ---
         layout = QVBoxLayout()
+        layout.setContentsMargins(40, 30, 40, 30)  # left, top, right, bottom
+        layout.setSpacing(12)
         layout.addWidget(tieu_de)
         layout.addWidget(self.lbl_ten)
         layout.addWidget(self.txt_ten)

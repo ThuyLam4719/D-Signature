@@ -50,7 +50,7 @@ def verify_certificate(cert_path, ca_public_key_path, output_pub_path):
             return False, "**LỖI KHÔNG HỢP LỆ:** Loại public key của CA không được hỗ trợ (chỉ hỗ trợ RSA và ECC)."
 
         # =======================================================
-        # ✅ CHỨNG CHỈ HỢP LỆ (Xác thực chữ ký thành công)
+        # CHỨNG CHỈ HỢP LỆ
         # =======================================================
         
         # Trích xuất và lưu Public Key vào file theo đường dẫn người dùng cung cấp
@@ -58,16 +58,16 @@ def verify_certificate(cert_path, ca_public_key_path, output_pub_path):
         output_file = write_public_key(public_key, output_pub_path)
         
         output_message = f"<h3 style='color: green;'>CHỨNG CHỈ HỢP LỆ</h3>"
-        output_message += f"Chữ ký được xác minh bằng Public Key của CA.\n\n"
-        
+
         if output_file:
-             output_message += f"Public Key đã được trích xuất và lưu tại: <b>{output_file}</b>\n\n"
-        
+            # Thay \n\n bằng <br><br>
+            output_message += f"Public Key đã được trích xuất và lưu tại: <b>{output_file}</b><br><br>"
+
         output_message += "<h4>Thông tin Chi tiết Chứng chỉ:</h4>"
-        output_message += f" - **Subject:** {cert.subject.rfc4514_string()}\n"
-        output_message += f" - **Issuer:** {cert.issuer.rfc4514_string()}\n"
-        output_message += f" - **Ngày hiệu lực:** {cert_valid_from}\n"
-        output_message += f" - **Ngày hết hạn:** {cert_expired_at}"
+        output_message += f" - <b>Subject:</b> {cert.subject.rfc4514_string()}<br>"
+        output_message += f" - <b>Issuer:</b> {cert.issuer.rfc4514_string()}<br>"
+        output_message += f" - <b>Ngày hiệu lực:</b> {cert_valid_from}<br>"
+        output_message += f" - <b>Ngày hết hạn:</b> {cert_expired_at}"
         
         return True, output_message
 

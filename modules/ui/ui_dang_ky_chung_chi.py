@@ -8,7 +8,13 @@ from modules import certRequest
 class WidgetDangKyChungChi(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Yêu cầu cấp chứng chỉ")
+        
+        self.setWindowTitle("Yêu cầu cấp Chứng chỉ số")
+
+        # --- 1. Tiêu đề ---
+        title = QLabel("Yêu Cầu Cấp Chứng Chỉ Số")
+        title.setStyleSheet("font-size: 24px; font-weight: bold; margin-bottom: 10px;")
+        
 
         self.label_name = QLabel("Tên người dùng (CN):")
         self.input_name = QLineEdit()
@@ -22,14 +28,19 @@ class WidgetDangKyChungChi(QWidget):
         self.label_priv = QLabel("Chọn file khóa bí mật (private key):")
         self.input_priv = QLineEdit()
         self.btn_chon_priv = QPushButton("Chọn private key...")
+        self.btn_chon_priv.setMinimumHeight(36)
 
         self.btn_gui_yeu_cau = QPushButton("Gửi yêu cầu đến CA")
+        self.btn_gui_yeu_cau.setMinimumHeight(40)
 
         layout_key = QHBoxLayout()
         layout_key.addWidget(self.input_priv)
         layout_key.addWidget(self.btn_chon_priv)
 
         layout = QVBoxLayout()
+        layout.setContentsMargins(40, 30, 40, 30)  # left, top, right, bottom
+        layout.setSpacing(12)
+        layout.addWidget(title)
         layout.addWidget(self.label_name)
         layout.addWidget(self.input_name)
         layout.addWidget(self.label_org)

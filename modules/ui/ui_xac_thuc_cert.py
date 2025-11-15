@@ -20,16 +20,17 @@ class WidgetXacThucCert(QWidget):
         self.output_pub_path = ""
         
         main_layout = QVBoxLayout(self)
-        main_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        main_layout.setContentsMargins(40, 30, 40, 30)  # left, top, right, bottom
+        main_layout.setSpacing(12)
 
         # --- 1. Tiêu đề ---
         title = QLabel("Xác Thực Chứng Chỉ Số")
-        title.setStyleSheet("font-size: 24px; font-weight: bold; margin-bottom: 10px;")
+        title.setStyleSheet("font-size: 24px; font-weight: bold; margin-bottom: 10px; color: #00b8d4;")
         main_layout.addWidget(title)
         
         # ------------------- 2. Vùng Chọn File Chứng Chỉ -------------------
         cert_group_layout, self.cert_path_input = self._create_file_selection_group(
-            "1. Đường dẫn Chứng chỉ (.pem):", 
+            "Đường dẫn Chứng chỉ (.pem):", 
             self._select_cert_file,
             is_input=True
         )
@@ -37,7 +38,7 @@ class WidgetXacThucCert(QWidget):
 
         # ------------------- 3. Vùng Chọn Public Key của CA -------------------
         ca_pub_group_layout, self.ca_pub_path_input = self._create_file_selection_group(
-            "2. Public Key của CA (.pem):", 
+            "Public Key của CA (.pem):", 
             self._select_ca_pub_file,
             is_input=True
         )
@@ -45,7 +46,7 @@ class WidgetXacThucCert(QWidget):
         
         # ------------------- 4. Vùng Chọn Nơi Lưu Public Key -------------------
         output_pub_group_layout, self.output_pub_path_input = self._create_file_selection_group(
-            "3. Lưu Public Key trích xuất:",
+            "Lưu Public Key trích xuất:",
             self._select_output_pub_file,
             is_input=False
         )
@@ -53,19 +54,21 @@ class WidgetXacThucCert(QWidget):
 
         # ------------------- 5. Nút Thực hiện và Kết quả -------------------
         self.verify_button = QPushButton("Xác Thực Chứng Chỉ")
-        self.verify_button.setStyleSheet("padding: 10px; font-size: 16px; background-color: #007bff; color: white; width: 200px;")
+        self.verify_button.setMinimumHeight(40)
         self.verify_button.clicked.connect(self._verify_cert)
         main_layout.addWidget(self.verify_button)
 
         # Vùng Kết quả
-        result_label = QLabel("4. Kết quả và Thông tin Chứng chỉ:")
+        result_label = QLabel("Kết quả và Thông tin Chứng chỉ:")
         result_label.setStyleSheet("font-weight: bold; margin-top: 10px;")
         main_layout.addWidget(result_label)
         
         self.result_output = QTextEdit()
         self.result_output.setReadOnly(True)
-        self.result_output.setFixedHeight(250)
-        main_layout.addWidget(self.result_output)
+        self.result_output.setMinimumHeight(200)
+        main_layout.addWidget(self.result_output, 1)
+        
+        main_layout.addStretch()
 
 
     # --- Hàm Helper TỔNG HỢP để tạo Layout chọn file ---
@@ -77,8 +80,9 @@ class WidgetXacThucCert(QWidget):
 
         input_field = QLineEdit()
         
-        browse_button = QPushButton("Chọn File" if is_input else "Lưu File")
+        browse_button = QPushButton("Chọn" if is_input else "Lưu")
         browse_button.setFixedWidth(100)
+        browse_button.setMinimumHeight(36)
         browse_button.clicked.connect(button_slot)
 
         h_layout.addWidget(label)
@@ -117,7 +121,7 @@ class WidgetXacThucCert(QWidget):
             self.output_pub_path_input.setText(file_name)
 
 
-    # --- Hàm Xử lý Xác thực (ĐÃ SỬA LỖI TRUYỀN THAM SỐ) ---
+    # --- Hàm Xử lý Xác thực ---
     def _verify_cert(self):
         """Thực hiện xác thực chứng chỉ."""
         self.result_output.clear()

@@ -2,6 +2,7 @@ from PySide6.QtWidgets import (
     QWidget, QLabel, QLineEdit, QTextEdit, QPushButton,
     QVBoxLayout, QFileDialog, QMessageBox, QHBoxLayout
 )
+from PySide6.QtCore import Qt
 import os
 # Đảm bảo đường dẫn import này đúng, nếu modules nằm ngang hàng signData.py thì cần sửa
 from modules import signData
@@ -17,12 +18,17 @@ class WidgetKyDuLieu(QWidget):
         self.duong_dan_luu = None
 
         # Các thành phần giao diện 
+        title = QLabel("Ký Dữ Liệu")
+        title.setStyleSheet("font-size: 24px; font-weight: bold; margin-bottom: 10px;")
+        
         self.nhan_khoa = QLabel("Chọn file khóa bí mật:")
         self.o_khoa = QLineEdit()
         self.nut_chon_khoa = QPushButton("Chọn khóa...")
+        self.nut_chon_khoa.setMinimumHeight(36)
 
         self.nhan_thong_diep = QLabel("Nhập thông điệp hoặc chọn file để ký:")
         self.nut_chon_file = QPushButton("Chọn file cần ký")
+        self.nut_chon_file.setMinimumHeight(36)
         self.nhan_file_da_chon = QLabel("(Chưa chọn file)")
         self.o_thong_diep = QTextEdit()
 
@@ -31,7 +37,9 @@ class WidgetKyDuLieu(QWidget):
         self.o_noi_luu = QLineEdit()
         self.o_noi_luu.setPlaceholderText("Chưa chọn nơi lưu...")
         self.nut_chon_luu = QPushButton("Chọn nơi lưu trữ")
+        self.nut_chon_luu.setMinimumHeight(36)
         self.nut_ky = QPushButton("Ký dữ liệu")
+        self.nut_ky.setMinimumHeight(40)
 
         # Layout khóa 
         layout_khoa = QHBoxLayout()
@@ -50,6 +58,9 @@ class WidgetKyDuLieu(QWidget):
 
         # Layout chính
         layout = QVBoxLayout()
+        layout.addWidget(title)
+        layout.setContentsMargins(40, 30, 40, 30)  # left, top, right, bottom
+        layout.setSpacing(12)
         layout.addWidget(self.nhan_khoa)
         layout.addLayout(layout_khoa)
         layout.addWidget(self.nhan_thong_diep)
