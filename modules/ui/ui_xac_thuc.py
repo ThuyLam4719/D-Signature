@@ -1,10 +1,10 @@
 ﻿from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
-    QLabel, QLineEdit, QMessageBox, QFileDialog
+    QLabel, QLineEdit, QMessageBox, QFileDialog, QTextEdit # Thêm QTextEdit
 )
 from PySide6.QtCore import Qt
 import os
-import re # Cần import thêm thư viện re để xử lý chuỗi Base64
+import re 
 
 from modules.verifySign import xac_thuc_chu_ky 
 
@@ -14,6 +14,13 @@ class WidgetXacThuc(QWidget):
         self.setWindowTitle("Xác thực Chữ ký")
         
         layout = QVBoxLayout(self)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop) # Căn chỉnh layout
+
+        # --- Tiêu đề ---
+        title = QLabel("Xác Thực Chữ Ký Số")
+        title.setStyleSheet("font-size: 24px; font-weight: bold; margin-bottom: 10px;")
+        layout.addWidget(title)
+
 
         #Chọn Khóa Công Khai
         layout.addWidget(QLabel("1. Khóa Công Khai (Public Key):"))
@@ -63,9 +70,16 @@ class WidgetXacThuc(QWidget):
 
         #Nút Xác Thực
         btn_xac_thuc = QPushButton("Xác Thực Chữ Ký")
-        btn_xac_thuc.setStyleSheet("background-color: #2ecc71; color: white; font-weight: bold; padding: 10px;")
+        btn_xac_thuc.setStyleSheet("background-color: #007bff; color: white; font-weight: bold; padding: 10px;")
         btn_xac_thuc.clicked.connect(self.thuc_hien_xac_thuc)
         layout.addWidget(btn_xac_thuc)
+
+        # Vùng hiển thị kết quả (QTextEdit MỚI)
+        layout.addWidget(QLabel("4. Kết Quả và Hash:"))
+        self.result_output = QTextEdit()
+        self.result_output.setReadOnly(True)
+        self.result_output.setFixedHeight(200)
+        layout.addWidget(self.result_output)
 
         layout.addStretch()
         self.setLayout(layout)
@@ -82,6 +96,7 @@ class WidgetXacThuc(QWidget):
             if selected_files:
                 file_path = selected_files[0]
                 line_edit.setText(file_path)
+                # Giữ lại QMessageBox thông báo đã chọn file (tùy chọn)
                 QMessageBox.information(self, "Đã chọn", f"Đã chọn file {file_type}: {os.path.basename(file_path)}")
     
     def doc_noi_dung_file(self, file_path, is_signature=False):
@@ -89,10 +104,19 @@ class WidgetXacThuc(QWidget):
         if not file_path:
             return None
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            # Đọc file nhị phân nếu không phải chữ ký (để đảm bảo tính toàn vẹn của dữ liệu)
+            mode = "r"
+            encoding = "utf-8"
+            if not is_signature:
+                # Nếu là thông điệp gốc (data), đọc dưới dạng bytes (mode="rb")
+                # Tuy nhiên, nếu hàm xac_thuc_chu_ky yêu cầu string, ta giữ 'r'
+                # Giả định xac_thuc_chu_ky nhận chuỗi string/bytes sạch.
+                pass 
+                
+            with open(file_path, mode, encoding=encoding) as f:
                 content = f.read()
             
-            #Nếu là chữ ký, loại bỏ tất cả khoảng trắng, tab, xuống dòng bên trong chuỗi Base64
+            # Nếu là chữ ký, loại bỏ tất cả khoảng trắng, tab, xuống dòng bên trong chuỗi Base64
             if is_signature:
                 content = re.sub(r'\s+', '', content)
                 
@@ -103,13 +127,15 @@ class WidgetXacThuc(QWidget):
             return None
 
     def thuc_hien_xac_thuc(self):
-        """Thực hiện xác thực chữ ký số và hiển thị hash"""
+        """Thực hiện xác thực chữ ký số và hiển thị hash vào QTextEdit"""
+        self.result_output.clear()
+        
         key_path = self.key_path_input.text()
         message_path = self.message_path_input.text()
         signature_path = self.signature_path_input.text()
 
         if not key_path or not message_path or not signature_path:
-            QMessageBox.warning(self, "Thiếu thông tin", "Vui lòng chọn đủ 3 file.")
+            self.result_output.setText("Vui lòng chọn đủ 3 file (Khóa, Thông điệp, Chữ ký).")
             return
 
         # Đọc nội dung thông điệp và chữ ký từ file
@@ -119,38 +145,44 @@ class WidgetXacThuc(QWidget):
         if thong_diep_raw is None or chu_ky_base64_raw is None:
             return
 
-        # Áp dụng .strip() cuối cùng để loại bỏ ký tự trắng ở đầu/cuối cho đồng bộ
+        # Áp dụng .strip() cuối cùng để loại bỏ ký tự trắng ở đầu/cuối
         thong_diep_clean = thong_diep_raw.strip()
         chu_ky_base64_clean = chu_ky_base64_raw.strip() 
 
-        # Gọi hàm xác thực (Nhận về tuple: (bool, hash_gốc, hash_giải_mã))
-        ket_qua, hash_goc, hash_giai_ma = xac_thuc_chu_ky(
-            key_path,
-            thong_diep_clean,
-            chu_ky_base64_clean
-        )
+        try:
+            # Gọi hàm xác thực (Nhận về tuple: (bool, hash_gốc, hash_giải_mã))
+            ket_qua, hash_goc, hash_giai_ma = xac_thuc_chu_ky(
+                key_path,
+                thong_diep_clean,
+                chu_ky_base64_clean
+            )
+            
+            # Chuẩn bị thông báo hiển thị trên QTextEdit
+            hash_msg = (
+                f"**HASH GỐC (từ Thông điệp):**\n"
+                f"```\n{hash_goc}\n```\n\n"
+                f"**HASH GIẢI MÃ (từ Chữ ký):**\n"
+                f"```\n{hash_giai_ma}\n```"
+            )
+            
+            if ket_qua:
+                # Nếu thành công, H1 và H2 đã khớp
+                thong_bao = (
+                    "<h3 style='color: green;'>CHỮ KÝ HỢP LỆ</h3>"
+                    "Thông điệp không bị thay đổi (Hash Gốc == Hash Giải mã).\n\n"
+                    f"{hash_msg}"
+                )
+            else:
+                # Nếu thất bại, hiển thị cả hai hash
+                thong_bao = (
+                    "<h3 style='color: red;'>CHỮ KÝ KHÔNG HỢP LỆ</h3>"
+                    "Thông điệp đã bị thay đổi, hoặc chữ ký/khóa không đúng.\n\n"
+                    f"{hash_msg}"
+                )
+            
+            # Thiết lập nội dung cho QTextEdit, dùng HTML để làm nổi bật kết quả
+            self.result_output.setText(thong_bao)
+            self.result_output.ensureCursorVisible()
 
-        # Chuẩn bị thông báo
-        hash_msg = (
-            f"1. HASH GỐC:\n"
-            f"{hash_goc}\n\n"
-            f"2. HASH GIẢI MÃ:\n"
-            f"{hash_giai_ma}"
-        )
-        
-        if ket_qua:
-            # Nếu thành công, H1 và H2 đã khớp
-            thong_bao = (
-                "✅ CHỮ KÝ HỢP LỆ\n"
-                "Thông điệp không bị thay đổi.\n\n"
-                f"{hash_msg}\n\n"
-            )
-            QMessageBox.information(self, "Kết Quả Xác Thực", thong_bao)
-        else:
-            # Nếu thất bại, hiển thị cả hai hash để debug (giúp người dùng so sánh)
-            thong_bao_loi = (
-                "❌ CHỮ KÝ KHÔNG HỢP LỆ\n"
-                "Thông điệp đã bị thay đổi, hoặc chữ ký/khóa không đúng.\n\n"
-                f"{hash_msg}"
-            )
-            QMessageBox.critical(self, "Kết Quả Xác Thực", thong_bao_loi)
+        except Exception as e:
+            self.result_output.setText(f"<h3 style='color: red;'>LỖI XỬ LÝ CHỮ KÝ</h3>Không thể thực hiện xác thực: {e}")

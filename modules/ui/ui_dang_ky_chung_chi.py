@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import (
+﻿from PySide6.QtWidgets import (
     QWidget, QLabel, QLineEdit, QTextEdit, QPushButton, QVBoxLayout,
     QFileDialog, QMessageBox, QHBoxLayout
 )
@@ -65,6 +65,6 @@ class WidgetDangKyChungChi(QWidget):
         result = certRequest.gui_yeu_cau(priv_path, cn, org, country)
 
         if result == "OK":
-            QMessageBox.information(self, "Thành công", "Yêu cầu chứng chỉ đã gửi tới CA.")
+            QMessageBox.information(self, "Thành công", "✅ Yêu cầu chứng chỉ đã gửi tới CA.")
         else:
             QMessageBox.critical(self, "Lỗi", f"Gửi yêu cầu thất bại: {result}")

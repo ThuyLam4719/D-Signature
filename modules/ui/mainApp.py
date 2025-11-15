@@ -10,12 +10,9 @@ from PySide6.QtGui import QIcon
 # Import giao diện con
 from modules.ui.ui_sinh_khoa import WidgetSinhKhoa
 from modules.ui.ui_ky_du_lieu import WidgetKyDuLieu
-<<<<<<< Updated upstream
-
-=======
 from modules.ui.ui_dang_ky_chung_chi import WidgetDangKyChungChi
 from modules.ui.ui_xac_thuc import WidgetXacThuc
->>>>>>> Stashed changes
+from modules.ui.ui_xac_thuc_cert import WidgetXacThucCert
 
 class MainApp(QWidget):
     def __init__(self):
@@ -30,12 +27,11 @@ class MainApp(QWidget):
         self.menu = QListWidget()
         self.menu.addItem(QListWidgetItem("Tạo khóa"))
         self.menu.addItem(QListWidgetItem("Ký dữ liệu"))
-<<<<<<< Updated upstream
-=======
         self.menu.addItem(QListWidgetItem("Yêu cầu chứng chỉ"))
         self.menu.addItem(QListWidgetItem("Xác thực"))
+        self.menu.addItem(QListWidgetItem("Xác thực chứng chỉ"))
 
->>>>>>> Stashed changes
+
 
         self.menu.setMaximumWidth(200)
         self.menu.setStyleSheet("""
@@ -53,17 +49,19 @@ class MainApp(QWidget):
         self.noi_dung = QStackedWidget()
         self.widget_sinh_khoa = WidgetSinhKhoa()
         self.widget_ky_du_lieu = WidgetKyDuLieu()
-<<<<<<< Updated upstream
+
         self.noi_dung.addWidget(self.widget_sinh_khoa)
         self.noi_dung.addWidget(self.widget_ky_du_lieu)
-=======
+
         self.widget_dang_ky = WidgetDangKyChungChi()
         self.widget_xac_thuc = WidgetXacThuc()
+        self.widget_xac_thuc_cert = WidgetXacThucCert()
         self.noi_dung.addWidget(self.widget_sinh_khoa)
         self.noi_dung.addWidget(self.widget_ky_du_lieu)
         self.noi_dung.addWidget(self.widget_dang_ky)
         self.noi_dung.addWidget(self.widget_xac_thuc)
->>>>>>> Stashed changes
+        self.noi_dung.addWidget(self.widget_xac_thuc_cert)
+
 
         #Khi click menu, đổi trang
         self.menu.currentRowChanged.connect(self.noi_dung.setCurrentIndex)
