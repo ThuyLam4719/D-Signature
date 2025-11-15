@@ -1,5 +1,4 @@
-﻿# verifyCert.py
-from cryptography import x509
+﻿from cryptography import x509
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding, rsa, ec
 from cryptography.exceptions import InvalidSignature
@@ -31,7 +30,7 @@ def verify_certificate(cert_path, ca_public_key_path, output_pub_path):
         with open(cert_path, "rb") as f:
             cert = x509.load_pem_x509_certificate(f.read())
         with open(ca_public_key_path, "rb") as f:
-            ca_pub = serialization.load_pem_public_key(f.read())
+            ca_pub_key = serialization.load_pem_public_key(f.read()) # Đổi tên biến CA Public Key thành ca_pub_key
 
         # ===== Dữ liệu cần xác thực =====
         tbs = cert.tbs_certificate_bytes
@@ -42,10 +41,10 @@ def verify_certificate(cert_path, ca_public_key_path, output_pub_path):
         cert_expired_at = cert.not_valid_after_utc
 
         # ===== Xác thực chữ ký =====
-        if isinstance(ca_pub, rsa.RSAPublicKey):
-            ca_pub.verify(signature, tbs, padding.PKCS1v15(), hash_algo)
-        elif isinstance(ca_pub, ec.EllipticCurvePublicKey):
-            ca_pub.verify(signature, tbs, ec.ECDSA(hash_algo))
+        if isinstance(ca_pub_key, rsa.RSAPublicKey): # Sử dụng ca_pub_key
+            ca_pub_key.verify(signature, tbs, padding.PKCS1v15(), hash_algo)
+        elif isinstance(ca_pub_key, ec.EllipticCurvePublicKey): # Sử dụng ca_pub_key
+            ca_pub_key.verify(signature, tbs, ec.ECDSA(hash_algo))
         else:
             return False, "**LỖI KHÔNG HỢP LỆ:** Loại public key của CA không được hỗ trợ (chỉ hỗ trợ RSA và ECC)."
 
@@ -53,12 +52,14 @@ def verify_certificate(cert_path, ca_public_key_path, output_pub_path):
         # CHỨNG CHỈ HỢP LỆ
         # =======================================================
         
-        # Trích xuất và lưu Public Key vào file theo đường dẫn người dùng cung cấp
-        public_key = cert.public_key()
-        output_file = write_public_key(public_key, output_pub_path)
+        # Trích xuất Public Key từ chứng chỉ (cert)
+        cert_public_key = cert.public_key() # Đổi tên biến Public Key trích xuất thành cert_public_key
+        output_file = write_public_key(cert_public_key, output_pub_path)
         
         output_message = f"<h3 style='color: green;'>CHỨNG CHỈ HỢP LỆ</h3>"
 
+        # ... (các đoạn code in thông tin khác không thay đổi) ...
+        # Phần code này vẫn đúng, không cần thay đổi gì thêm
         if output_file:
             # Thay \n\n bằng <br><br>
             output_message += f"Public Key đã được trích xuất và lưu tại: <b>{output_file}</b><br><br>"
