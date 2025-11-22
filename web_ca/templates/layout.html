@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Hệ thống PKI CA{% endblock %}</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        background-color: #f4f6f9;
+        font-family: "Inter", sans-serif;
+        color: #333;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Navbar Gradient chuyên nghiệp */
+      .navbar {
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        background: linear-gradient(to right, #1a1c23, #2d3436) !important;
+      }
+      .navbar-brand {
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+
+      /* Main container đẩy footer xuống đáy */
+      .container-main {
+        flex: 1;
+        padding-bottom: 40px;
+      }
+
+      /* Card Style */
+      .card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        margin-bottom: 25px;
+        overflow: hidden;
+        transition: transform 0.2s;
+      }
+      .card-header {
+        background-color: #fff;
+        border-bottom: 1px solid #f0f0f0;
+        padding: 15px 20px;
+        font-weight: 600;
+      }
+
+      /* Custom Scrollbar cho khung xem code/key */
+      pre {
+        background: #282c34;
+        color: #abb2bf;
+        padding: 15px;
+        border-radius: 8px;
+        max-height: 250px;
+        overflow-y: auto;
+        font-size: 11px;
+        font-family: "Consolas", monospace;
+        border: 1px solid #3e4451;
+      }
+
+      /* Footer Style */
+      footer {
+        background-color: #fff;
+        padding: 25px 0;
+        text-align: center;
+        border-top: 1px solid #eaeaea;
+        margin-top: auto;
+        font-size: 0.9rem;
+        color: #6c757d;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          <i class="fas fa-shield-alt me-2 text-warning"></i>PKI CA System
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/certs">
+                <i class="fas fa-certificate me-1"></i> Chứng chỉ công khai
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/revoked">
+                <i class="fas fa-ban me-1"></i> DS Thu hồi (CRL)
+              </a>
+            </li>
+          </ul>
+
+          <ul class="navbar-nav ms-auto">
+            {# Chỉ hiển thị các nút này nếu ĐÃ đăng nhập Admin #} {% if
+            session.get('admin') %}
+            <li class="nav-item">
+              <a class="nav-link active fw-bold text-warning" href="/admin">
+                <i class="fas fa-user-shield me-1"></i> Trang Quản Trị
+              </a>
+            </li>
+            <li class="nav-item ms-lg-2">
+              <a class="btn btn-outline-light btn-sm mt-1" href="/admin/logout">
+                <i class="fas fa-sign-out-alt me-1"></i> Đăng xuất
+              </a>
+            </li>
+            {% endif %} {# Không có phần 'else', người thường sẽ không thấy nút
+            đăng nhập #}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container container-main mt-4">
+      {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+      <div class="container">
+        <div class="mb-2">
+          <i class="fas fa-lock me-2"></i>Hệ thống mô phỏng PKI & Chứng thực
+          điện tử
+        </div>
+        <small>&copy; 2025 Niên luận ATTT. All rights reserved.</small>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

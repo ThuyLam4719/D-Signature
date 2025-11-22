@@ -1,0 +1,243 @@
+{% extends "layout.html" %} {% block title %}Dashboard Quản trị{% endblock %} {%
+block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h2 class="fw-bold text-dark mb-0">
+      <i class="fas fa-tachometer-alt text-primary me-2"></i>Dashboard
+    </h2>
+    <p class="text-muted mb-0">
+      Quản lý toàn bộ chứng chỉ và yêu cầu cấp phát.
+    </p>
+  </div>
+  <div class="text-end">
+    <span class="badge bg-primary p-2 px-3 rounded-pill"
+      ><i class="fas fa-user-shield me-1"></i> Administrator</span
+    >
+  </div>
+</div>
+
+<div class="card border-start border-4 border-warning">
+  <div
+    class="card-header bg-white d-flex justify-content-between align-items-center"
+  >
+    <h5 class="text-warning mb-0">
+      <i class="fas fa-hourglass-half me-2"></i>Yêu cầu đang chờ duyệt (Pending
+      CSR)
+    </h5>
+    <span class="badge bg-warning text-dark rounded-pill px-3"
+      >{{ pending|length }} yêu cầu</span
+    >
+  </div>
+  <div class="card-body p-0">
+    {% if pending %}
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th class="ps-4">ID</th>
+            <th>Chủ thể (CN)</th>
+            <th>Tổ chức (O)</th>
+            <th>Quốc gia (C)</th>
+            <th>Public Key</th>
+            <th class="text-end pe-4">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in pending %}
+          <tr>
+            <td class="ps-4 fw-bold text-muted">#{{ r.id }}</td>
+            <td class="fw-bold text-primary">{{ r.cn }}</td>
+            <td>{{ r.org }}</td>
+            <td><span class="badge bg-secondary">{{ r.country }}</span></td>
+
+            <td>
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-info"
+                data-bs-toggle="modal"
+                data-bs-target="#modalKey{{r.id}}"
+              >
+                <i class="fas fa-key me-1"></i> Xem Key
+              </button>
+
+              <div
+                class="modal fade"
+                id="modalKey{{r.id}}"
+                tabindex="-1"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header bg-dark text-white">
+                      <h5 class="modal-title fs-6">
+                        <i class="fas fa-key me-2"></i>Public Key của {{ r.cn }}
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body bg-light">
+                      <div class="mb-2 text-muted small">
+                        Được trích xuất từ CSR gửi lên:
+                      </div>
+                      <pre
+                        class="p-3 border rounded bg-white text-dark"
+                        style="font-size: 12px"
+                      >
+{{ r.csr | extract_pubkey }}</pre
+                      >
+                    </div>
+                    <div class="modal-footer py-1">
+                      <button
+                        type="button"
+                        class="btn btn-secondary btn-sm"
+                        data-bs-dismiss="modal"
+                      >
+                        Đóng
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+
+            <td class="text-end pe-4">
+              <a
+                href="/admin/approve/{{ r.id }}"
+                class="btn btn-success btn-sm px-3 shadow-sm"
+              >
+                <i class="fas fa-check me-1"></i> Duyệt & Cấp
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+      <i class="fas fa-check-circle fa-3x text-muted opacity-25 mb-3"></i>
+      <p class="text-muted">Không có yêu cầu nào đang chờ xử lý.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 mt-4">
+    <div class="card border-start border-4 border-success">
+      <div
+        class="card-header bg-white d-flex justify-content-between align-items-center"
+      >
+        <h5 class="text-success mb-0">
+          <i class="fas fa-certificate me-2"></i>Chứng chỉ đã cấp (Issued)
+        </h5>
+        <span class="badge bg-success rounded-pill px-3"
+          >{{ issued|length }} chứng chỉ</span
+        >
+      </div>
+      <div class="card-body p-0">
+        {% if issued %}
+        <div class="table-responsive" style="max-height: 400px">
+          <table class="table table-striped table-hover align-middle mb-0">
+            <thead class="table-light sticky-top">
+              <tr>
+                <th class="ps-4">ID</th>
+                <th>Chủ thể (CN)</th>
+                <th>Tổ chức (O)</th>
+                <th>Quốc gia</th>
+                <th>File chứng chỉ</th>
+                <th class="text-end pe-4">Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for c in issued %}
+              <tr>
+                <td class="ps-4">{{ c.id }}</td>
+                <td class="fw-bold">{{ c.cn }}</td>
+                <td>{{ c.org }}</td>
+                <td>{{ c.country }}</td>
+                <td>
+                  <a
+                    href="/issued/{{ c.cert_file }}"
+                    class="badge bg-light text-dark text-decoration-none border py-2 px-3"
+                  >
+                    <i class="fas fa-file-download me-1"></i> {{ c.cert_file }}
+                  </a>
+                </td>
+                <td class="text-end pe-4">
+                  <a
+                    href="/admin/revoke/{{ c.id }}"
+                    class="btn btn-outline-danger btn-sm"
+                    onclick="return confirm('CẢNH BÁO: Bạn có chắc chắn muốn thu hồi chứng chỉ này? Hành động này không thể hoàn tác!');"
+                  >
+                    <i class="fas fa-ban me-1"></i> Thu hồi
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="p-4 text-center text-muted">
+          Chưa có chứng chỉ nào được cấp.
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 mt-4">
+    <div class="card border-start border-4 border-danger">
+      <div
+        class="card-header bg-white d-flex justify-content-between align-items-center"
+      >
+        <h5 class="text-danger mb-0">
+          <i class="fas fa-times-circle me-2"></i>Danh sách đã thu hồi (Revoked)
+        </h5>
+        <span class="badge bg-danger rounded-pill px-3"
+          >{{ revoked|length }}</span
+        >
+      </div>
+      <div class="card-body p-0">
+        {% if revoked %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th class="ps-4">ID</th>
+                <th>Chủ thể (CN)</th>
+                <th>Tổ chức</th>
+                <th>File cũ</th>
+                <th>Thời gian thu hồi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in revoked %}
+              <tr class="text-muted">
+                <td class="ps-4">{{ r.id }}</td>
+                <td><del>{{ r.cn }}</del></td>
+                <td>{{ r.org }}</td>
+                <td>{{ r.cert_file }}</td>
+                <td class="text-danger fw-bold">
+                  <small>{{ r.revoked_at }}</small>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="p-4 text-center text-muted">
+          Hiện chưa có chứng chỉ nào bị thu hồi.
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

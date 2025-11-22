@@ -1,0 +1,10 @@
+[
+  {
+    "id": 1,
+    "cn": "test1",
+    "org": "test1",
+    "country": "VN",
+    "cert_file": "test1_cert.pem",
+    "status": "valid"
+  }
+]

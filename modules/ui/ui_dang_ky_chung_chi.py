@@ -10,13 +10,14 @@ class WidgetDangKyChungChi(QWidget):
         super().__init__()
         self.setWindowTitle("Yêu cầu cấp chứng chỉ")
 
-        self.label_name = QLabel("Tên người dùng (CN):")
+        self.label_name = QLabel("Tên người dùng:")
         self.input_name = QLineEdit()
 
         self.label_org = QLabel("Tổ chức:")
         self.input_org = QLineEdit()
 
-        self.label_country = QLabel("Quốc gia (VN, US...):")
+        # --- THAY ĐỔI Ở ĐÂY: Cho phép nhập tùy ý ---
+        self.label_country = QLabel("Quốc gia:") 
         self.input_country = QLineEdit()
 
         self.label_priv = QLabel("Chọn file khóa bí mật (private key):")
@@ -29,6 +30,7 @@ class WidgetDangKyChungChi(QWidget):
         layout_key.addWidget(self.input_priv)
         layout_key.addWidget(self.btn_chon_priv)
 
+        # --- Layout tổng ---
         layout = QVBoxLayout()
         layout.addWidget(self.label_name)
         layout.addWidget(self.input_name)
@@ -39,6 +41,7 @@ class WidgetDangKyChungChi(QWidget):
         layout.addWidget(self.label_priv)
         layout.addLayout(layout_key)
         layout.addWidget(self.btn_gui_yeu_cau)
+        layout.addStretch()
 
         self.setLayout(layout)
 
