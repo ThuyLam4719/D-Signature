@@ -5,6 +5,7 @@
 LIGHT_THEME = """
     * {
         font-family: "Courier New", "Consolas", monospace;
+        outline: none;
     }
     
     QWidget {
@@ -25,14 +26,14 @@ LIGHT_THEME = """
     }
     
     #logo {
-        color: #00b8d4;
+        color: #0a0e27;
         font-size: 24px;
         font-weight: 800;
         letter-spacing: 3px;
         padding: 28px 24px;
         background: qlineargradient(x1:0, y1:0, x1:1, y1:0,
-                                    stop:0 rgba(0, 184, 212, 0.08),
-                                    stop:1 transparent);
+                                    stop:0 rgba(0, 184, 212, 0.5),
+                                    stop:1 #00b8d4);
         border-bottom: 2px solid #00b8d4;
         text-transform: uppercase;
     }
@@ -125,7 +126,7 @@ LIGHT_THEME = """
         border-radius: 6px;
         padding: 10px 12px;
         color: #00b8d4;
-        font-size: 16px;
+        font-size: 13px;
         font-family: "Courier New", monospace;
         selection-background-color: rgba(0, 184, 212, 0.3);
     }
@@ -222,7 +223,7 @@ LIGHT_THEME = """
     QLabel {
         color: #00b8d4;
         background-color: transparent;
-        font-size: 13px;
+        font-size: 16px;
         font-weight: 500;
     }
     

@@ -74,10 +74,10 @@ class MainApp(QWidget):
 
         # Menu items with icons
         self.menu_data = [
-            ("Sinh Khóa", "Tạo cặp khóa RSA/ECDSA", WidgetSinhKhoa()),
-            ("Ký Dữ Liệu", "Ký dữ liệu hoặc tệp", WidgetKyDuLieu()),
-            ("Yêu Cầu Chứng Chỉ", "Tạo CSR & đăng ký", WidgetDangKyChungChi()),
-            ("Xác Thực Chữ Ký Số", "Xác thực chữ ký số", WidgetXacThuc()),
+            ("Tạo khóa", "Tạo cặp khóa RSA/ECDSA", WidgetSinhKhoa()),
+            ("Tạo chữ ký", "Ký dữ liệu hoặc tệp", WidgetKyDuLieu()),
+            ("Tạo CSR", "Tạo CSR & đăng ký", WidgetDangKyChungChi()),
+            ("Xác Thực Chữ Ký", "Xác thực chữ ký số", WidgetXacThuc()),
             ("Xác Thực Chứng Chỉ", "Kiểm tra chứng chỉ", WidgetXacThucCert())
         ]
 

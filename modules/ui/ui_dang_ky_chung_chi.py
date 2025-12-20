@@ -9,7 +9,7 @@ class WidgetDangKyChungChi(QWidget):
     def __init__(self):
         super().__init__()
         
-        self.setWindowTitle("Yêu cầu cấp Chứng chỉ số")
+        self.setWindowTitle("Tạo CSR")
 
         # --- 1. Tiêu đề ---
         title = QLabel("Yêu Cầu Cấp Chứng Chỉ Số")

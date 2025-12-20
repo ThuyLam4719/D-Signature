@@ -30,7 +30,7 @@ class WidgetXacThucCert(QWidget):
         
         # ------------------- 2. Vùng Chọn File Chứng Chỉ -------------------
         cert_group_layout, self.cert_path_input = self._create_file_selection_group(
-            "Đường dẫn Chứng chỉ (.pem):", 
+            "Đường dẫn Chứng chỉ:", 
             self._select_cert_file,
             is_input=True
         )
@@ -38,7 +38,7 @@ class WidgetXacThucCert(QWidget):
 
         # ------------------- 3. Vùng Chọn Public Key của CA -------------------
         ca_pub_group_layout, self.ca_pub_path_input = self._create_file_selection_group(
-            "Public Key của CA (.pem):", 
+            "Public Key của CA:", 
             self._select_ca_pub_file,
             is_input=True
         )
@@ -65,7 +65,8 @@ class WidgetXacThucCert(QWidget):
         
         self.result_output = QTextEdit()
         self.result_output.setReadOnly(True)
-        self.result_output.setMinimumHeight(200)
+        self.result_output.setMinimumHeight(300)
+        self.result_output.setStyleSheet("font-size: 14px;")
         main_layout.addWidget(self.result_output, 1)
         
         main_layout.addStretch()

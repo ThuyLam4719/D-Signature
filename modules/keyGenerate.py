@@ -7,8 +7,8 @@ def sinh_khoa_rsa(ten="nguoidung", bit=2048, thu_muc="data/keys"):
         os.makedirs(thu_muc)
 
     khoa_rieng = rsa.generate_private_key(
-        public_exponent=65537, #giá trị mặc định tiêu chuẩn, an toàn
-        key_size=bit #2048,3072,4096
+        public_exponent=65537, #giá trị e mặc định tiêu chuẩn, an toàn
+        key_size=bit #n = 2048,3072,4096
     )
 
     with open(os.path.join(thu_muc, f"{ten}_rsa_private.pem"), "wb") as f:

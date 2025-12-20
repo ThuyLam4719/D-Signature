@@ -1,0 +1,63 @@
+﻿{% extends "layout.html" %} {% block title %}Kho chứng chỉ số{% endblock %} {%
+block content %}
+<div class="text-center py-5 bg-white rounded-3 shadow-sm mb-4">
+    <h1 class="fw-bold text-primary mb-2">Kho chứng chỉ số công cộng</h1>
+    <p class="text-muted fs-5">
+        Tra cứu và tải về các chứng chỉ số hợp lệ do Demo CA cấp phát.
+    </p>
+    <div class="mt-3">
+        <a href="/revoked" class="btn btn-outline-danger rounded-pill px-4">
+            <i class="fas fa-exclamation-triangle me-2"></i>Xem danh sách thu hồi
+            (CRL)
+        </a>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white py-3">
+        <h5 class="mb-0 text-success fw-bold">
+            <i class="fas fa-check-circle me-2"></i>Danh sách chứng chỉ hợp lệ
+        </h5>
+    </div>
+    <div class="card-body p-0">
+        {% if issued %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4" width="10%">ID</th>
+                        <th width="25%">Chủ thể (CN)</th>
+                        <th width="30%">Tổ chức (Org)</th>
+                        <th width="15%">Quốc gia</th>
+                        <th width="20%" class="text-end pe-4">Tải về</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in issued %}
+                    <tr>
+                        <td class="ps-4">
+                            <span class="badge bg-light text-dark border">#{{ c.id }}</span>
+                        </td>
+                        <td class="fw-bold text-dark">{{ c.cn }}</td>
+                        <td>{{ c.org }}</td>
+                        <td>{{ c.country }}</td>
+                        <td class="text-end pe-4">
+                            <a href="/issued/{{ c.cert_file }}"
+                                class="btn btn-primary btn-sm px-3 rounded-pill shadow-sm">
+                                <i class="fas fa-download me-1"></i> Tải .PEM
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <img src="https://cdn-icons-png.flaticon.com/512/7486/7486754.png" width="80" class="opacity-25 mb-3" />
+            <p class="text-muted">Hệ thống chưa cấp phát chứng chỉ nào.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

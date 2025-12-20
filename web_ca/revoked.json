@@ -1,0 +1,29 @@
+[
+  {
+    "id": 6,
+    "cn": "Cong Tan",
+    "org": "Truong Dai hoc Can Tho",
+    "country": "VN",
+    "cert_file": "Cong Tan_cert.pem",
+    "status": "revoked",
+    "revoked_at": "2025-11-22 21:39:39"
+  },
+  {
+    "id": 4,
+    "cn": "dem khong ngu",
+    "org": "Can Tho Uni",
+    "country": "VN",
+    "cert_file": "dem khong ngu_cert.pem",
+    "status": "revoked",
+    "revoked_at": "2025-11-22 23:18:13"
+  },
+  {
+    "id": 4,
+    "cn": "Tan Cong",
+    "org": "Dai Hoi Can Tho",
+    "country": "US",
+    "cert_file": "Tan Cong_cert.pem",
+    "status": "revoked",
+    "revoked_at": "2025-11-23 00:40:10"
+  }
+]

@@ -11,14 +11,14 @@ from modules import signData
 class WidgetKyDuLieu(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Ký dữ liệu")
+        self.setWindowTitle("Tạo Chữ Ký")
 
         # Biến lưu đường dẫn file cần ký và nơi lưu chữ ký
         self.duong_dan_file = None
         self.duong_dan_luu = None
 
         # Các thành phần giao diện 
-        title = QLabel("Ký Dữ Liệu")
+        title = QLabel("Tạo Chữ Ký")
         title.setStyleSheet("font-size: 24px; font-weight: bold; margin-bottom: 10px;")
         
         self.nhan_khoa = QLabel("Chọn file khóa bí mật:")

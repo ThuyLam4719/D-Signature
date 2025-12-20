@@ -25,14 +25,5 @@
     "csr": "-----BEGIN CERTIFICATE REQUEST-----\nMIICgjCCAWoCAQAwPTELMAkGA1UEBhMCVk4xGDAWBgNVBAoMD0RhaSBIb2MgQ2Fu\nIFRobzEUMBIGA1UEAwwLRGVtIE1hdCBOZ3UwggEiMA0GCSqGSIb3DQEBAQUAA4IB\nDwAwggEKAoIBAQDfSf3E1KrqxgxuER+D1bfV7H+ShoPOBHhFhh0wb5dUyF582EMy\nUB5BJ2J3q38Vjnci6P5iH2oOwDFCvmAgFiOyqyqZFJ8rVwPf9mAvYeJfVuIRCSsH\nQFrhGY/pns9escpcUr4RV7iGaEbw76MoFwaRk0XJcYj+18TEMdMKkJNEvugbal4K\nzfjSpN7nQxvEK8RPhbAvu0wYbqHiYHLKHAcsFC+q68chOey+H5qQp3VZYVm8UPPi\nZEtlpQSLdBYndMj0xR/V63J5exWt4KsSPIxo8FSuEnXpbjQf/hQOMQEezqATszA7\nG3LcvJ86etgz8mPn5oeKiH0nwOrcgbz+vFgZAgMBAAGgADANBgkqhkiG9w0BAQsF\nAAOCAQEAkEXtMc4fIcfZwh057LL36nIfHcSGFzM1vYPnUHSqDIIyTUnfub3Wavzg\nTLUs5dsd9ZVKQj9KWwd04WYgWhLvqtL0nYoLMaXN8mOIiFgis3Hl5nVhDuawoUYI\neAMfYi2zSRyQAz/RC1+t5MZbQgtCQ0NOHfSd4kM1JfgYSUZ1lkBNcC5BOvGAKDJU\nKXgmlSzIELTRtnc/LsJE/EIvhcrcwg7KOIjTy0bdnMyab/RIC6u6gxqTryL5CMgh\n8ru71ILn+pC1M9/DwCUpIOWsnCkG2TYZL5pzhsjQ3ALvv3YNdMeclglZJAbcee+C\nlBL4CKBonBx8xMmSWmCBqqRBqUbcmg==\n-----END CERTIFICATE REQUEST-----\n",
     "status": "approved",
     "cert_path": "Dem Mat Ngu_cert.pem"
-  },
-  {
-    "id": 4,
-    "cn": "Dem Khong Ngu",
-    "org": "Cua Dong Mien Tay",
-    "country": "US",
-    "csr": "-----BEGIN CERTIFICATE REQUEST-----\nMIH7MIGjAgEAMEExCzAJBgNVBAYTAlVTMRowGAYDVQQKDBFDdWEgRG9uZyBNaWVu\nIFRheTEWMBQGA1UEAwwNRGVtIEtob25nIE5ndTBZMBMGByqGSM49AgEGCCqGSM49\nAwEHA0IABMcm48wCTEr+WoWGLAkkVdfiYxwDQw+pFWzcm3A58bOdntJvWNaNg+v8\n2KTV5z/tUNp+q+mzvXMqRZqsmzOuiE+gADAKBggqhkjOPQQDAgNHADBEAiAo6uJA\nwn3hlDiS+XcRViHUhXSqhZe6C37HFcD3wv5n5QIgW6ujfHUCvKjS2pTaqgYNnv/b\nsqgN2GTcd54SSqLOFBk=\n-----END CERTIFICATE REQUEST-----\n",
-    "status": "approved",
-    "cert_path": "Dem Khong Ngu_cert.pem"
   }
 ]

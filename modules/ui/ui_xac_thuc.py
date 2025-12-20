@@ -1,6 +1,6 @@
 ﻿from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
-    QLabel, QLineEdit, QMessageBox, QFileDialog, QTextEdit # Thêm QTextEdit
+    QLabel, QLineEdit, QMessageBox, QFileDialog, QTextEdit, QTabWidget # Thêm QTextEdit
 )
 from PySide6.QtCore import Qt
 import os
@@ -40,24 +40,47 @@ class WidgetXacThuc(QWidget):
         h_layout_key.addWidget(btn_chon_khoa, 1)
         layout.addLayout(h_layout_key)
         
-        #Chọn Thông Điệp Gốc
-        layout.addWidget(QLabel("Thông Điệp Gốc (File đã được ký):"))
+        #Chọn Thông Điệp Gốc - Tab giữa File và Direct Input
+        layout.addWidget(QLabel("Thông Điệp Gốc:"))
+        
+        # Tab widget cho Thông Điệp
+        message_tab = QTabWidget()
+        message_tab.setMaximumHeight(120)
+        
+        # Tab 1: Import từ File
+        tab_file = QWidget()
+        tab_file_layout = QVBoxLayout(tab_file)
+        tab_file_layout.setContentsMargins(0, 0, 0, 0)
         self.message_path_input = QLineEdit()
         self.message_path_input.setPlaceholderText("Đường dẫn tới file thông điệp gốc (.txt, .data, ...)")
         self.message_path_input.setReadOnly(True)
-        btn_chon_message = QPushButton("Chọn")
+        btn_chon_message = QPushButton("Chọn File")
         btn_chon_message.setMinimumHeight(36)
         btn_chon_message.clicked.connect(lambda: self.chon_file(
             self.message_path_input, "Tất cả Files (*);;Text Files (*.txt)", "Chọn File Thông Điệp Gốc", "message"
         ))
-        
         h_layout_msg = QHBoxLayout()
         h_layout_msg.addWidget(self.message_path_input, 3)
         h_layout_msg.addWidget(btn_chon_message, 1)
-        layout.addLayout(h_layout_msg)
+        tab_file_layout.addLayout(h_layout_msg)
+        tab_file.setLayout(tab_file_layout)
+        
+        # Tab 2: Nhập trực tiếp
+        tab_direct = QWidget()
+        tab_direct_layout = QVBoxLayout(tab_direct)
+        tab_direct_layout.setContentsMargins(0, 0, 0, 0)
+        self.message_direct_input = QTextEdit()
+        self.message_direct_input.setPlaceholderText("Nhập thông điệp trực tiếp tại đây...")
+        self.message_direct_input.setMaximumHeight(80)
+        tab_direct_layout.addWidget(self.message_direct_input)
+        tab_direct.setLayout(tab_direct_layout)
+        
+        message_tab.addTab(tab_file, "Import File")
+        message_tab.addTab(tab_direct, "Nhập Trực Tiếp")
+        layout.addWidget(message_tab)
 
         #Chọn Chữ Ký
-        layout.addWidget(QLabel("Chữ Ký Số (File Base64):"))
+        layout.addWidget(QLabel("Chữ Ký Số:"))
         self.signature_path_input = QLineEdit()
         self.signature_path_input.setPlaceholderText("Đường dẫn tới file chữ ký (.sig, .txt, ...)")
         self.signature_path_input.setReadOnly(True)
@@ -83,8 +106,9 @@ class WidgetXacThuc(QWidget):
         layout.addWidget(QLabel("Kết Quả và Hash:"))
         self.result_output = QTextEdit()
         self.result_output.setReadOnly(True)
-        self.result_output.setFixedHeight(200)
-        layout.addWidget(self.result_output)
+        self.result_output.setMinimumHeight(250)
+        self.result_output.setStyleSheet("font-size: 14px;")
+        layout.addWidget(self.result_output, 1)  # Thêm stretch factor để chiếm không gian
 
         layout.addStretch()
         self.setLayout(layout)
@@ -134,18 +158,30 @@ class WidgetXacThuc(QWidget):
         self.result_output.clear()
         
         key_path = self.key_path_input.text()
-        message_path = self.message_path_input.text()
         signature_path = self.signature_path_input.text()
 
-        if not key_path or not message_path or not signature_path:
-            self.result_output.setText("Vui lòng chọn đủ 3 file (Khóa, Thông điệp, Chữ ký).")
+        if not key_path or not signature_path:
+            self.result_output.setText("Vui lòng chọn Khóa Công Khai và Chữ Ký Số.")
             return
 
-        # Đọc nội dung thông điệp và chữ ký từ file
-        thong_diep_raw = self.doc_noi_dung_file(message_path, is_signature=False)
-        chu_ky_base64_raw = self.doc_noi_dung_file(signature_path, is_signature=True)
+        # Lấy thông điệp từ file hoặc nhập trực tiếp
+        message_path = self.message_path_input.text()
+        message_direct = self.message_direct_input.toPlainText().strip()
+        
+        # Ưu tiên thông điệp nhập trực tiếp, nếu không có thì lấy từ file
+        if message_direct:
+            thong_diep_raw = message_direct
+        elif message_path:
+            thong_diep_raw = self.doc_noi_dung_file(message_path, is_signature=False)
+            if thong_diep_raw is None:
+                return
+        else:
+            self.result_output.setText("Vui lòng nhập thông điệp hoặc chọn file thông điệp.")
+            return
 
-        if thong_diep_raw is None or chu_ky_base64_raw is None:
+        # Đọc chữ ký từ file
+        chu_ky_base64_raw = self.doc_noi_dung_file(signature_path, is_signature=True)
+        if chu_ky_base64_raw is None:
             return
 
         # Áp dụng .strip() cuối cùng để loại bỏ ký tự trắng ở đầu/cuối
