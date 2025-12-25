@@ -4,7 +4,7 @@ This project uses PySide6 to create a desktop app simulating the process of key 
 
 ## run desktop app 
 
-*! before running app, make sure that you are in the root directory.*
+*! before running these cmd, make sure that you are in the root directory.*
 
 - python -m .modules.ui.mainApp
 
