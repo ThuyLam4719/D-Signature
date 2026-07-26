@@ -11,4 +11,7 @@ This project uses PySide6 to create a desktop app simulating the process of key 
 ## run web app
 
 - python -m .modules.web\_ca.app
+## access here to watch demo:
+https://www.youtube.com/watch?v=D7NSRylYWzg
+<img width="853" height="517" alt="image" src="https://github.com/user-attachments/assets/d86ccd55-6904-4b4a-b2a7-d746ca07b62d" />
 
